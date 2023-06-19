@@ -15,3 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ArticleController::class, 'index'])->name('home');
+Route::get('/create', [ArticleController::class, 'create'])->name('create');
+Route::get('/view/{slug}', [ArticleController::class, 'view'])->name('view');

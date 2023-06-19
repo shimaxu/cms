@@ -13,4 +13,17 @@ class ArticleController extends Controller
             'articles' => Article::get()
         ]);
     }
+
+    public function create(Article  $article) {
+        return Inertia::render('Form', [
+            'article' => Article::get()
+        ]);
+    }
+
+
+    public function view(Article  $article) {
+        return Inertia::render('View', [
+            'article' => $article
+        ]);
+    }
 }
