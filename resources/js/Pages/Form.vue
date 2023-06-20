@@ -37,10 +37,6 @@
                 <div>
                     <div class="flex justify-between">
                         <h2 class="text-base font-semibold leading-7 text-gray-900">New Post</h2>
-                        <div>
-                            <a href="#" class="relative z-10 bg-yellow-100 px-3 py-1.5 font-medium text-gray-600 hover:bg-yellow-300">&#10000;</a>
-                            <a href="#" class="relative z-10 bg-red-100 px-3 py-1.5 font-medium text-gray-600 hover:bg-red-300">&#128465;</a>
-                        </div>
                     </div>
 
                     <div class="space-y-8 pb-12 sm:space-y-0 sm:pb-0">

@@ -5,7 +5,7 @@
     import { reactive } from 'vue'
 
     const state = reactive({
-        modalState: true
+        modalState: false
     })
 
     defineProps({

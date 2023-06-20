@@ -1,9 +1,26 @@
 <script setup>
-import {Link} from "@inertiajs/vue3";
+import {Link, router} from "@inertiajs/vue3";
+import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { reactive } from 'vue'
+
+const state = reactive({
+    modalState: true
+})
 
 defineProps({
     article: Object
 })
+
+function edit(slug) {
+    router.get(`${slug}/edit`)
+}
+
+function destroy(slug) {
+    state.modalState = true;
+    if(confirm('Are you sure you want delete the article')) {
+        router.delete(`${slug}`)
+    }
+}
 </script>
 
 <template>
@@ -20,10 +37,16 @@ defineProps({
                     </h3>
                 </div>
 
-                <div>
-                    <a :href="`/${article.slug}/edit`" class="relative z-10 bg-yellow-100 px-3 py-1.5 font-medium text-gray-600 hover:bg-yellow-300">&#10000;</a>
-                    <a href="#" class="relative z-10 bg-red-100 px-3 py-1.5 font-medium text-gray-600 hover:bg-red-300">&#128465;</a>
+                <div class="space-x-2">
+                    <button @click="edit(article.slug)">
+                        <PencilIcon class="h-4 w-4" aria-hidden="true"/>
+                    </button>
+
+                    <button @click="destroy(article.slug)">
+                        <TrashIcon class="h-4 w-4" aria-hidden="true"/>
+                    </button>
                 </div>
+
             </div>
 
             <div class="flex items-center gap-x-4 text-xs">
@@ -41,6 +64,8 @@ defineProps({
             </div>
 
         </article>
+
+        <DeleteModal :modal-open="state.modalState"/>
     </div>
 
 </template>
