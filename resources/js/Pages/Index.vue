@@ -1,9 +1,27 @@
 <script setup>
-    import {Link} from "@inertiajs/inertia-vue3";
+    import {Link, router} from "@inertiajs/vue3";
+    import DeleteModal from './Shared/Modal.vue'
+    import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+    import { reactive } from 'vue'
+
+    const state = reactive({
+        modalState: true
+    })
 
     defineProps({
         articles: Object
     })
+
+    function edit(slug) {
+        router.get(`${slug}/edit`)
+    }
+
+    function destroy(slug) {
+        state.modalState = true;
+        if(confirm('Are you sure you want delete the article')) {
+            router.delete(`${slug}`)
+        }
+    }
 </script>
 
 <template>
@@ -12,9 +30,10 @@
             <button class="py-2 px-4 bg-orange-600 text-sm font-semibold leading-6 text-white">+ Add New</button>
         </Link>
 
-        <article class="relative isolate flex flex-col gap-8 lg:flex-row bg-white">
+        <article v-for="article in articles" class="relative isolate flex flex-col gap-8 lg:flex-row bg-white">
             <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-                <img src="/images/1.jpg" alt="" class="absolute inset-0 h-full w-full bg-gray-50 object-cover">
+                <img v-if="article.featured_image" :src="article.featured_image" alt="" class="absolute inset-0 h-full w-full bg-gray-50 object-cover">
+                <img v-else src="/images/placeholder.png" alt="" class="absolute inset-0 h-full w-full bg-gray-50 object-cover">
                 <div class="absolute inset-0 ring-1 ring-inset ring-gray-900/10"></div>
             </div>
             <div class="">
@@ -22,24 +41,31 @@
                 <div class="group relative">
                     <div class="flex items-center gap-x-4 text-xs p-2 w-full justify-between">
                         <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 text-gray-600">
-                            Demon Slayer
+                            {{ article.title }}
                         </h3>
-                        <div>
-                            <a href="#" class="relative z-10 bg-yellow-100 px-3 py-1.5 font-medium text-gray-600 hover:bg-yellow-300">&#10000;</a>
-                            <a href="#" class="relative z-10 bg-red-100 px-3 py-1.5 font-medium text-gray-600 hover:bg-red-300">&#128465;</a>
+                        <div class="space-x-2">
+                            <button @click="edit(article.slug)">
+                                <PencilIcon class="h-4 w-4" aria-hidden="true"/>
+                            </button>
+
+                            <button @click="destroy(article.slug)">
+                                <TrashIcon class="h-4 w-4" aria-hidden="true"/>
+                            </button>
                         </div>
                     </div>
 
 
-                    <p class="mt-5 text-sm leading-6 text-gray-600">Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.</p>
+                    <p class="mt-5 text-sm leading-6 text-gray-600">{{ article.content }}</p>
                 </div>
                 <div class="mt-6 flex border-gray-900/5">
-                    <Link href="/view/slug" replace>
+                    <Link :href="`/${article.slug}`" replace>
                         <button class="py-2 px-4 bg-orange-600 text-sm font-semibold leading-6 text-white">Read More →</button>
                     </Link>
                 </div>
             </div>
         </article>
+
+        <DeleteModal :modal-open="state.modalState"/>
     </div>
 
 
