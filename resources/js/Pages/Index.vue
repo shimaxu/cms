@@ -2,11 +2,10 @@
     import {Link, router} from "@inertiajs/vue3";
     import DeleteModal from './Shared/Modal.vue'
     import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline'
-    import { reactive } from 'vue'
+    import { ref } from 'vue'
 
-    const state = reactive({
-        modalState: false
-    })
+    let modalState = ref(false)
+    let deleteSlug = ref('')
 
     defineProps({
         articles: Object
@@ -16,11 +15,18 @@
         router.get(`${slug}/edit`)
     }
 
-    function destroy(slug) {
-        state.modalState = true;
-        if(confirm('Are you sure you want delete the article')) {
-            router.delete(`${slug}`)
-        }
+    function destroy(deleteSlug) {
+        router.delete(`${deleteSlug}`)
+        closeModal();
+    }
+
+    function showModal(slug) {
+        deleteSlug = slug;
+        modalState.value = true;
+    }
+
+    function closeModal() {
+        modalState.value = false;
     }
 </script>
 
@@ -33,7 +39,7 @@
             </button>
         </Link>
 
-        <article v-for="article in articles" class="relative isolate flex flex-col gap-8 lg:flex-row bg-white shadow-sm">
+        <article v-for="article in articles" class="relative isolate flex flex-col gap-2 lg:flex-row bg-white shadow-sm">
             <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
                 <img v-if="article.featured_image" :src="article.featured_image" alt="" class="absolute inset-0 h-full w-full bg-gray-50 object-cover">
                 <img v-else src="/images/placeholder.png" alt="" class="absolute inset-0 h-full w-full bg-gray-50 object-cover">
@@ -51,7 +57,7 @@
                                 <PencilIcon class="h-4 w-4" aria-hidden="true"/>
                             </button>
 
-                            <button @click="destroy(article.slug)">
+                            <button @click="showModal(article.slug)">
                                 <TrashIcon class="h-4 w-4" aria-hidden="true"/>
                             </button>
                         </div>
@@ -68,7 +74,7 @@
             </div>
         </article>
 
-        <DeleteModal :modal-open="state.modalState"/>
+        <DeleteModal :modal-state="modalState" @closeModal="closeModal" @delete="destroy(deleteSlug)"/>
     </div>
 
 

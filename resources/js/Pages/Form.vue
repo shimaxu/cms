@@ -1,5 +1,5 @@
 <script setup>
-    import { useForm, Link } from '@inertiajs/vue3'
+    import { useForm, Link, router } from '@inertiajs/vue3'
     import moment from 'moment'
 
     const props = defineProps({
@@ -95,7 +95,7 @@
                             <label class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0 space-x-4">
                                 <button :disabled="form.processing" type="submit" class="inline-flex justify-center py-2 px-6 bg-orange-600 text-sm font-semibold leading-6 text-white">Save</button>
-                                <button type="button" class="inline-flex justify-center py-2 px-6 bg-gray-300 text-sm font-semibold leading-6 text-gray-500">Cancel</button>
+                                <button @click="router.get('/')" type="button" class="inline-flex justify-center py-2 px-6 bg-gray-300 text-sm font-semibold leading-6 text-gray-500">Cancel</button>
 
                             </div>
                         </div>

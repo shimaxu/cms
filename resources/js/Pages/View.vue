@@ -1,26 +1,33 @@
 <script setup>
 import {Link, router} from "@inertiajs/vue3";
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { reactive } from 'vue'
+import DeleteModal from './Shared/Modal.vue'
+import { ref } from 'vue'
 import moment from "moment";
-
-const state = reactive({
-    modalState: true
-})
 
 defineProps({
     article: Object
 })
 
+let modalState = ref(false)
+let deleteSlug = ref('')
+
 function edit(slug) {
     router.get(`${slug}/edit`)
 }
 
-function destroy(slug) {
-    state.modalState = true;
-    if(confirm('Are you sure you want delete the article')) {
-        router.delete(`${slug}`)
-    }
+function destroy(deleteSlug) {
+    router.delete(`${deleteSlug}`)
+    closeModal();
+}
+
+function showModal(slug) {
+    deleteSlug = slug;
+    modalState.value = true;
+}
+
+function closeModal() {
+    modalState.value = false;
 }
 </script>
 
@@ -43,7 +50,7 @@ function destroy(slug) {
                         <PencilIcon class="h-4 w-4" aria-hidden="true"/>
                     </button>
 
-                    <button @click="destroy(article.slug)">
+                    <button @click="showModal(article.slug)">
                         <TrashIcon class="h-4 w-4" aria-hidden="true"/>
                     </button>
                 </div>
@@ -66,7 +73,7 @@ function destroy(slug) {
 
         </article>
 
-        <DeleteModal :modal-open="state.modalState"/>
+        <DeleteModal :modal-state="modalState" @closeModal="closeModal" @delete="destroy(deleteSlug)"/>
     </div>
 
 </template>
