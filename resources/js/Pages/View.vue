@@ -2,6 +2,7 @@
 import {Link, router} from "@inertiajs/vue3";
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { reactive } from 'vue'
+import moment from "moment";
 
 const state = reactive({
     modalState: true
@@ -24,14 +25,14 @@ function destroy(slug) {
 </script>
 
 <template>
-    <div class="mx-auto max-w-7xl p-10 font-[poppins]">
+    <div class="mx-auto max-w-7xl p-10 font-[poppins] space-y-2">
         <Link href="/" replace>
             <button class="py-2 px-4 bg-orange-600 text-sm font-semibold leading-6 text-white">Home</button>
         </Link>
 
-        <article class="flex flex-col items-start space-y-4">
-            <div class="flex justify-between w-full">
-                <div>
+        <article class="flex flex-col items-start bg-white">
+            <div class="flex justify-between w-full p-4">
+                <div class="">
                     <h3 class="mt-3 text-lg font-semibold leading-6 text-slate-700 group-hover:text-gray-600">
                         {{ article.title }}
                     </h3>
@@ -49,8 +50,8 @@ function destroy(slug) {
 
             </div>
 
-            <div class="flex items-center gap-x-4 text-xs">
-                <time datetime="2020-03-16" class="relative font-medium text-gray-600 hover:bg-gray-100">{{ article.published_at }}</time>
+            <div class="flex items-center gap-x-4 text-xs p-4">
+                <time datetime="2020-03-16" class="relative font-medium text-gray-600 hover:bg-gray-100">{{ moment(article.published_at).format('d MMM Y') }}</time>
             </div>
             <div class="relative w-full">
                 <img v-if="article.featured_image" :src="article.featured_image" alt="" class="h-aspect-[16/9] w-full bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[4/2]">

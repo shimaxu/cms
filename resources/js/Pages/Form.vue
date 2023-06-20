@@ -33,7 +33,7 @@
         </Link>
 
         <form @submit.prevent="article?.id?update(article?.slug):store()">
-            <div class="space-y-12 sm:space-y-16">
+            <div class="space-y-12 sm:space-y-16 bg-white p-4">
                 <div>
                     <div class="flex justify-between">
                         <h2 class="text-base font-semibold leading-7 text-gray-900">New Post</h2>
