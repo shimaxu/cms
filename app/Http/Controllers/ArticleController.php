@@ -27,11 +27,13 @@ class ArticleController extends Controller
             'excerpt' => $request->get('excerpt') ? $request->get('excerpt') : Str::limit($request->get('content', 255))
         ]);
 
-        $article = Article::create($request->validate([
+        $request->validate([
             'title' => 'required',
             'slug' =>  'required',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2024'
-        ]));
+        ]);
+
+        $article = Article::create($request->all());
 
         if ($request->file('featured_image')) {
             $filename = time().'.'.$request->file('featured_image')->extension();
@@ -52,16 +54,21 @@ class ArticleController extends Controller
     public function update(Request $request, $slug) {
         $article = Article::whereSlug($slug)->firstOrfail();
 
+//        dd( $request->all());
+
         $request->merge([
             'slug' => Str::slug($request->title),
             'excerpt' => $request->get('excerpt') ? $request->get('excerpt') : Str::limit($request->get('content', 255))
         ]);
 
-        $article->update($request->validate([
+        $request->validate([
             'title' => 'required',
             'slug' =>  'required',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2024'
-        ]));
+        ]);
+
+        $article->update($request->all());
+
 
         if ($request->file('featured_image')) {
             $filename = time().'.'.$request->file('featured_image')->extension();

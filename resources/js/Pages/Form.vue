@@ -2,17 +2,17 @@
     import { useForm, Link } from '@inertiajs/vue3'
     import moment from 'moment'
 
-    defineProps({
+    const props = defineProps({
         article: Object,
     })
 
     const form = useForm({
-        title: null,
-        slug: null,
-        content: null,
-        excerpt: null,
-        published_at: null,
-        featured_image: null,
+        title: props.article?.title,
+        slug: props.article?.slug,
+        content: props.article?.content,
+        excerpt: props.article?.excerpt,
+        published_at: props.article?.published_at,
+        featured_image: props.article?.featured_image,
     })
 
     function store() {
@@ -44,7 +44,7 @@
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-4">
                             <label for="title" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Title</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input :value="article?.title" @input="form.title = $event.target.value" id="title" name="title" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Title"/>
+                                <input :value="form.title" @input="form.title = $event.target.value" id="title" name="title" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Title"/>
                                 <div class="text-red-400 py-2" v-if="form.errors.title">{{ form.errors.title }}</div>
                             </div>
                         </div>
@@ -52,21 +52,21 @@
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-4">
                             <label for="slug" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Slug</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input :value="article?.slug" @input="form.slug = $event.target.value" id="slug" name="slug" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Slug"/>
+                                <input :value="form.slug" @input="form.slug = $event.target.value" id="slug" name="slug" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Slug"/>
                             </div>
                         </div>
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-4">
                             <label for="content" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Content</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <textarea @input="form.content = $event.target.value" id="content" name="content" rows="10" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Start Writing..">{{article?.content}}</textarea>
+                                <textarea :value="form.content" @input="form.content = $event.target.value" id="content" name="content" rows="10" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Start Writing..">{{form.content}}</textarea>
                             </div>
                         </div>
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-4">
                             <label for="excerpt" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Excerpt</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <textarea @input="form.excerpt = $event.target.value" id="excerpt" name="excerpt" rows="6" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Start Writing..">{{article?.excerpt}}</textarea>
+                                <textarea @input="form.excerpt = $event.target.value" id="excerpt" name="excerpt" rows="6" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Start Writing..">{{form.excerpt}}</textarea>
                             </div>
                         </div>
 
@@ -76,7 +76,7 @@
                                 <input @input="form.featured_image = $event.target.files[0]" type="file" id="featured_image" name="featured_image" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"/>
                                 <div class="text-red-400 py-2" v-if="form.errors.featured_image">{{ form.errors.featured_image }}</div>
                                 <div v-if="article?.featured_image">
-                                    <img v-if="article.featured_image" :src="article.featured_image" alt="" class="h-aspect-[16/9] w-full bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[4/2]">
+                                    <img v-if="form.featured_image" :src="form.featured_image" alt="" class="h-aspect-[16/9] w-full bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[4/2]">
                                 </div>
                                 <progress v-if="form.progress" :value="form.progress.percentage" max="100">
                                     {{ form.progress.percentage }}%
@@ -87,7 +87,7 @@
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-4">
                             <label for="published_at" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Published Date</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input :value="moment(article?.published_at).format('yyyy-MM-D')" @input="form.published_at = $event.target.value" type="date" id="published_at" name="published_at" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Published Date"/>
+                                <input :value="moment(form.published_at).format('yyyy-MM-D')" @input="form.published_at = $event.target.value" type="date" id="published_at" name="published_at" class="block w-full border-0 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 sm:text-sm sm:leading-6" placeholder="Published Date"/>
                             </div>
                         </div>
 
